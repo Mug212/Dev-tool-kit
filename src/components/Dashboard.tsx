@@ -24,6 +24,12 @@ const Dashboard = () => {
       case 'ui-components':
         navigate('/ui-components');
         break;
+      case 'code-snippets':
+        navigate('/code-snippets');
+        break;
+      case 'animations':
+        navigate('/animations');
+        break;
       // Add more navigation cases as we create more pages
       default:
         console.log(`Opening ${toolId}`);
