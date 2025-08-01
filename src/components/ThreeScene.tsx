@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Box, Sphere, Torus } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Mesh } from 'three';
 
 function RotatingBox() {
@@ -14,9 +14,10 @@ function RotatingBox() {
   });
 
   return (
-    <Box ref={meshRef} position={[-2, 0, 0]} args={[1, 1, 1]}>
+    <mesh ref={meshRef} position={[-2, 0, 0]}>
+      <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color="#8B5CF6" />
-    </Box>
+    </mesh>
   );
 }
 
@@ -30,9 +31,10 @@ function FloatingSphere() {
   });
 
   return (
-    <Sphere ref={meshRef} position={[0, 0, 0]} args={[0.8, 32, 32]}>
+    <mesh ref={meshRef} position={[0, 0, 0]}>
+      <sphereGeometry args={[0.8, 32, 32]} />
       <meshStandardMaterial color="#06D6A0" wireframe />
-    </Sphere>
+    </mesh>
   );
 }
 
@@ -46,9 +48,10 @@ function SpinningTorus() {
   });
 
   return (
-    <Torus ref={meshRef} position={[2, 0, 0]} args={[0.6, 0.3, 16, 100]}>
+    <mesh ref={meshRef} position={[2, 0, 0]}>
+      <torusGeometry args={[0.6, 0.3, 16, 100]} />
       <meshStandardMaterial color="#F72585" />
-    </Torus>
+    </mesh>
   );
 }
 
