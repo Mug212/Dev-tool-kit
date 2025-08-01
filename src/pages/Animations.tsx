@@ -1,1099 +1,491 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const fadeInAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.fade-in {
-  animation: fadeIn 1s ease-in-out forwards;
-}
+// --- Animation Code Snippets for Display & Copying ---
+const fadeInAnimationCode = String.raw`// CSS
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: fadeIn 1s ease-in-out forwards; }
 
 // React Component
-// import React from 'react';
+const FadeIn = ({ children, delay = 0 }) => <div className="fade-in" style={{ animationDelay: \`\${delay}s\` }}>{children}</div>;`;
 
-interface FadeInProps {
-  children: React.ReactNode;
-  delay?: number;
-}
-
-const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0 }) => {
-  return (
-    <div
-      className="fade-in"
-      style={{ animationDelay: `\\`${delay}s\\`` }}
-    >
-      {children}
-    </div>
-  );
-};
-
-// export default FadeIn;
-`;
-
-const slideInAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes slideIn {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.slide-in {
-  animation: slideIn 0.8s ease-out forwards;
-}
+const slideInAnimationCode = String.raw`// CSS
+@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.slide-in { animation: slideIn 0.8s ease-out forwards; }
 
 // React Component
-// import React from 'react';
+const SlideIn = ({ children, delay = 0 }) => <div className="slide-in" style={{ animationDelay: \`\${delay}s\` }}>{children}</div>;`;
 
-interface SlideInProps {
-  children: React.ReactNode;
-  delay?: number;
-}
-
-const SlideIn: React.FC<SlideInProps> = ({ children, delay = 0 }) => {
-  return (
-    <div
-      className="slide-in"
-      style={{ animationDelay: `\\`${delay}s\\`` }}
-    >
-      {children}
-    </div>
-  );
-};
-
-// export default SlideIn;
-`;
-
-const rotateAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.rotate-animation {
-  animation: rotate 2s linear infinite;
-}
+const rotateAnimationCode = String.raw`// CSS
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.rotate-animation { animation: rotate 2s linear infinite; display: inline-block; }
 
 // React Component
-// import React from 'react';
+const Rotate = ({ children }) => <div className="rotate-animation">{children}</div>;`;
 
-interface RotateProps {
-  children: React.ReactNode;
-}
-
-const Rotate: React.FC<RotateProps> = ({ children }) => {
-  return (
-    <div className="rotate-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Rotate;
-`;
-
-const scaleAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes scale {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.scale-animation {
-  animation: scale 0.6s ease-out forwards;
-}
+const scaleAnimationCode = String.raw`// CSS
+@keyframes scale { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+.scale-animation { animation: scale 0.6s ease-out forwards; }
 
 // React Component
-// import React from 'react';
+const Scale = ({ children, delay = 0 }) => <div className="scale-animation" style={{ animationDelay: \`\${delay}s\` }}>{children}</div>;`;
 
-interface ScaleProps {
-  children: React.ReactNode;
-  delay?: number;
-}
-
-const Scale: React.FC<ScaleProps> = ({ children, delay = 0 }) => {
-  return (
-    <div
-      className="scale-animation"
-      style={{ animationDelay: `\\`${delay}s\\`` }}
-    >
-      {children}
-    </div>
-  );
-};
-
-// export default Scale;
-`;
-
-const pulseAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.pulse-animation {
-  animation: pulse 1.5s infinite;
-}
+const pulseAnimationCode = String.raw`// CSS
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.pulse-animation { animation: pulse 1.5s infinite; display: inline-block; }
 
 // React Component
-// import React from 'react';
+const Pulse = ({ children }) => <div className="pulse-animation">{children}</div>;`;
 
-interface PulseProps {
-  children: React.ReactNode;
-}
-
-const Pulse: React.FC<PulseProps> = ({ children }) => {
-  return (
-    <div className="pulse-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Pulse;
-`;
-
-const flipAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes flip {
-  0% { transform: perspective(400px) rotateY(0); opacity: 0; }
-  40% { transform: perspective(400px) rotateY(170deg); }
-  50% { transform: perspective(400px) rotateY(190deg); opacity: 1; }
-  80% { transform: perspective(400px) rotateY(180deg); }
-  100% { transform: perspective(400px) rotateY(180deg); opacity: 1; }
-}
-
-.flip-animation {
-  animation: flip 1.5s forwards;
-  backface-visibility: visible;
-}
+const flipAnimationCode = String.raw`// CSS
+@keyframes flip { from { transform: perspective(400px) rotateY(90deg); opacity: 0; } to { transform: perspective(400px) rotateY(0); opacity: 1; } }
+.flip-animation { animation: flip 1s ease-out forwards; backface-visibility: visible; display: inline-block; }
 
 // React Component
-// import React from 'react';
+const Flip = ({ children }) => <div className="flip-animation">{children}</div>;`;
 
-interface FlipProps {
-  children: React.ReactNode;
-}
-
-const Flip: React.FC<FlipProps> = ({ children }) => {
-  return (
-    <div className="flip-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Flip;
-`;
-
-const shakeAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-  20%, 40%, 60%, 80% { transform: translateX(10px); }
-}
-
-.shake-animation {
-  animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
+const shakeAnimationCode = String.raw`// CSS
+@keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); } 20%, 40%, 60%, 80% { transform: translateX(10px); } }
+.shake-animation { animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both; }
 
 // React Component
-// import React from 'react';
+const Shake = ({ children }) => <div className="shake-animation">{children}</div>;`;
 
-interface ShakeProps {
-  children: React.ReactNode;
-}
-
-const Shake: React.FC<ShakeProps> = ({ children }) => {
-  return (
-    <div className="shake-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Shake;
-`;
-
-const wobbleAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes wobble {
-  0% { transform: translateX(0%); }
-  15% { transform: translateX(-25%) rotate(-5deg); }
-  30% { transform: translateX(20%) rotate(3deg); }
-  45% { transform: translateX(-15%) rotate(-3deg); }
-  60% { transform: translateX(10%) rotate(2deg); }
-  75% { transform: translateX(-5%) rotate(-1deg); }
-  100% { transform: translateX(0%); }
-}
-
-.wobble-animation {
-  animation: wobble 1s ease-in-out;
-}
+const bounceAnimationCode = String.raw`// CSS
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-30px); } 60% { transform: translateY(-15px); } }
+.bounce-animation { animation: bounce 2s infinite; display: inline-block; }
 
 // React Component
-// import React from 'react';
+const Bounce = ({ children }) => <div className="bounce-animation">{children}</div>;`;
 
-interface WobbleProps {
-  children: React.ReactNode;
-}
-
-const Wobble: React.FC<WobbleProps> = ({ children }) => {
-  return (
-    <div className="wobble-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Wobble;
-`;
-
-const zoomInAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale3d(.3, .3, .3); }
-  50% { opacity: 1; }
-}
-
-.zoom-in {
-  animation: zoomIn 0.6s ease-out forwards;
-}
+const wobbleAnimationCode = String.raw`// CSS
+@keyframes wobble { 0% { transform: translateX(0%); } 15% { transform: translateX(-25%) rotate(-5deg); } 30% { transform: translateX(20%) rotate(3deg); } 45% { transform: translateX(-15%) rotate(-3deg); } 60% { transform: translateX(10%) rotate(2deg); } 75% { transform: translateX(-5%) rotate(-1deg); } 100% { transform: translateX(0%); } }
+.wobble-animation { animation: wobble 1s ease-in-out; }
 
 // React Component
-// import React from 'react';
+const Wobble = ({ children }) => <div className="wobble-animation">{children}</div>;`;
 
-interface ZoomInProps {
-  children: React.ReactNode;
-  delay?: number;
-}
+const zoomInAnimationCode = String.raw`// CSS
+@keyframes zoomIn { from { opacity: 0; transform: scale3d(.3, .3, .3); } 50% { opacity: 1; } }
+.zoom-in { animation: zoomIn 0.6s ease-out forwards; }
 
-const ZoomIn: React.FC<ZoomInProps> = ({ children, delay = 0 }) => {
-  return (
-    <div
-      className="zoom-in"
-      style={{ animationDelay: `\\`${delay}s\\`` }}
-    >
-      {children}
-    </div>
-  );
-};
+// React Component
+const ZoomIn = ({ children, delay = 0 }) => <div className="zoom-in" style={{ animationDelay: \`\${delay}s\` }}>{children}</div>;`;
 
-// export default ZoomIn;
-`;
+const lightSpeedInAnimationCode = String.raw`// CSS
+@keyframes lightSpeedIn { from { transform: translate3d(100%, 0, 0) skewX(-30deg); opacity: 0; } 60% { transform: skewX(20deg); opacity: 1; } 80% { transform: skewX(-5deg); } to { transform: translate3d(0, 0, 0); } }
+.lightspeed-in { animation: lightSpeedIn 1s ease-out forwards; }
 
-const lightSpeedInAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes lightSpeedIn {
-  from {
-    transform: translate3d(100%, 0, 0) skewX(-30deg);
-    opacity: 0;
+// React Component
+const LightSpeedIn = ({ children }) => <div className="lightspeed-in">{children}</div>;`;
+
+const rollInAnimationCode = String.raw`// CSS
+@keyframes rollIn { from { opacity: 0; transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+.roll-in { animation: rollIn 0.8s ease-out forwards; }
+
+// React Component
+const RollIn = ({ children }) => <div className="roll-in">{children}</div>;`;
+
+const hingeAnimationCode = String.raw`// CSS
+@keyframes hinge { 0% { transform-origin: top left; animation-timing-function: ease-in-out; } 20%, 60% { transform: rotate3d(0, 0, 1, 80deg); transform-origin: top left; animation-timing-function: ease-in-out; } 40%, 80% { transform: rotate3d(0, 0, 1, 60deg); transform-origin: top left; animation-timing-function: ease-in-out; opacity: 1; } 100% { transform: translate3d(0, 700px, 0); opacity: 0; } }
+.hinge-animation { animation: hinge 2s forwards; }
+
+// React Component
+const Hinge = ({ children }) => <div className="hinge-animation">{children}</div>;`;
+
+const rubberBandAnimationCode = String.raw`// CSS
+@keyframes rubberBand { 0% { transform: scale3d(1, 1, 1); } 30% { transform: scale3d(1.25, 0.75, 1); } 40% { transform: scale3d(0.75, 1.25, 1); } 50% { transform: scale3d(1.15, 0.85, 1); } 65% { transform: scale3d(.95, 1.05, 1); } 75% { transform: scale3d(1.05, .95, 1); } 100% { transform: scale3d(1, 1, 1); } }
+.rubberband-animation { animation: rubberBand 1s forwards; }
+
+// React Component
+const RubberBand = ({ children }) => <div className="rubberband-animation">{children}</div>;`;
+
+const flashAnimationCode = String.raw`// CSS
+@keyframes flash { 0%, 50%, 100% { opacity: 1; } 25%, 75% { opacity: 0; } }
+.flash-animation { animation: flash 1s forwards; }
+
+// React Component
+const Flash = ({ children }) => <div className="flash-animation">{children}</div>;`;
+
+const jelloAnimationCode = String.raw`// CSS
+@keyframes jello { 0%, 11.1%, 100% { transform: none; } 22.2% { transform: skewX(-12.5deg) skewY(-12.5deg); } 33.3% { transform: skewX(6.25deg) skewY(6.25deg); } 44.4% { transform: skewX(-3.125deg) skewY(-3.125deg); } 55.5% { transform: skewX(1.5625deg) skewY(1.5625deg); } 66.6% { transform: skewX(-0.78125deg) skewY(-0.78125deg); } 77.7% { transform: skewX(0.390625deg) skewY(0.390625deg); } 88.8% { transform: skewX(-0.1953125deg) skewY(-0.1953125deg); } }
+.jello-animation { animation: jello 1s forwards; transform-origin: center; }
+
+// React Component
+const Jello = ({ children }) => <div className="jello-animation">{children}</div>;`;
+
+const tadaAnimationCode = String.raw`// CSS
+@keyframes tada { from { transform: scale3d(1, 1, 1); } 10%, 20% { transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg); } 30%, 50%, 70%, 90% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg); } 40%, 60%, 80% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg); } to { transform: scale3d(1, 1, 1); } }
+.tada-animation { animation: tada 1s forwards; }
+
+// React Component
+const Tada = ({ children }) => <div className="tada-animation">{children}</div>;`;
+
+const swingAnimationCode = String.raw`// CSS
+@keyframes swing { 20% { transform: rotate3d(0, 0, 1, 15deg); } 40% { transform: rotate3d(0, 0, 1, -10deg); } 60% { transform: rotate3d(0, 0, 1, 5deg); } 80% { transform: rotate3d(0, 0, 1, -5deg); } 100% { transform: rotate3d(0, 0, 1, 0deg); } }
+.swing-animation { transform-origin: top center; animation: swing 1s ease-in-out forwards; }
+
+// React Component
+const Swing = ({ children }) => <div className="swing-animation">{children}</div>;`;
+
+const zoomOutAnimationCode = String.raw`// CSS
+@keyframes zoomOut { from { opacity: 1; } 50% { opacity: 0; transform: scale3d(.3, .3, .3); } to { opacity: 0; } }
+.zoom-out { animation: zoomOut 0.6s ease-out forwards; }
+
+// React Component
+const ZoomOut = ({ children, delay = 0 }) => <div className="zoom-out" style={{ animationDelay: \`\${delay}s\` }}>{children}</div>;`;
+
+const lightSpeedOutAnimationCode = String.raw`// CSS
+@keyframes lightSpeedOut { from { opacity: 1; } to { transform: translate3d(100%, 0, 0) skewX(30deg); opacity: 0; } }
+.lightspeed-out { animation: lightSpeedOut 1s ease-in forwards; }
+
+// React Component
+const LightSpeedOut = ({ children }) => <div className="lightspeed-out">{children}</div>;`;
+
+// --- Combined CSS for All Animations ---
+const allAnimationsCSS = [
+  fadeInAnimationCode, slideInAnimationCode, rotateAnimationCode, scaleAnimationCode, pulseAnimationCode, flipAnimationCode, shakeAnimationCode, bounceAnimationCode, wobbleAnimationCode, zoomInAnimationCode, lightSpeedInAnimationCode, rollInAnimationCode, hingeAnimationCode, rubberBandAnimationCode, flashAnimationCode, jelloAnimationCode, tadaAnimationCode, swingAnimationCode, zoomOutAnimationCode, lightSpeedOutAnimationCode
+].map(code => code.split('// React Component')[0]).join('\n');
+
+// --- Helper Function for Copying to Clipboard ---
+const copyToClipboard = (text, callback) => {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (callback) callback('Copied!');
+    }).catch(() => {
+      fallbackCopyTextToClipboard(text, callback);
+    });
+  } else {
+    fallbackCopyTextToClipboard(text, callback);
   }
-  60% {
-    transform: skewX(20deg);
-    opacity: 1;
-  }
-  80% {
-    transform: skewX(-5deg);
-  }
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.lightspeed-in {
-  animation: lightSpeedIn 1s ease-out forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface LightSpeedInProps {
-  children: React.ReactNode;
-}
-
-const LightSpeedIn: React.FC<LightSpeedInProps> = ({ children }) => {
-  return (
-    <div className="lightspeed-in">
-      {children}
-    </div>
-  );
 };
 
-// export default LightSpeedIn;
-`;
-
-const rollInAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes rollIn {
-  from {
-    opacity: 0;
-    transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg);
+const fallbackCopyTextToClipboard = (text, callback) => {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-9999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    if (callback) callback('Copied!');
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
+    if (callback) callback('Failed to copy');
   }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.roll-in {
-  animation: rollIn 0.8s ease-out forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface RollInProps {
-  children: React.ReactNode;
-}
-
-const RollIn: React.FC<RollInProps> = ({ children }) => {
-  return (
-    <div className="roll-in">
-      {children}
-    </div>
-  );
+  document.body.removeChild(textArea);
 };
 
-// export default RollIn;
-`;
+// --- Enhanced Animation Card Component ---
+const AnimationCard = ({ title, description, animationClass, code, children, isInfinite = false }) => {
+  const [copyStatus, setCopyStatus] = useState('Copy Code');
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [animationKey, setAnimationKey] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
 
-const hingeAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes hinge {
-  0% { transform-origin: top left; animation-timing-function: ease-in-out; }
-  20%, 60% { transform: rotate3d(0, 0, 1, 80deg); transform-origin: top left; animation-timing-function: ease-in-out; }
-  40%, 80% { transform: rotate3d(0, 0, 1, 60deg); transform-origin: top left; animation-timing-function: ease-in-out; opacity: 1; }
-  100% { transform: translate3d(0, 700px, 0); opacity: 0; }
-}
+  const handleCopy = () => {
+    copyToClipboard(code, (status) => {
+      setCopyStatus(status);
+      setTimeout(() => setCopyStatus('Copy Code'), 2000);
+    });
+  };
 
-.hinge-animation {
-  animation: hinge 2s forwards;
-}
+  const handleReplay = () => {
+    setIsAnimating(false);
+    setIsPlaying(true);
+    setAnimationKey(prev => prev + 1);
+    setTimeout(() => {
+      setIsAnimating(true);
+    }, 50);
+  };
 
-// React Component
-// import React from 'react';
+  const handlePlayPause = () => {
+    if (isInfinite) {
+      // For infinite animations, toggle the animation state
+      setIsAnimating(!isAnimating);
+      setIsPlaying(!isPlaying);
+    } else {
+      // For finite animations, replay if paused, pause if playing
+      if (isPlaying) {
+        setIsAnimating(false);
+        setIsPlaying(false);
+      } else {
+        setAnimationKey(prev => prev + 1);
+        setIsAnimating(true);
+        setIsPlaying(true);
+        
+        // Auto-pause after animation completes (estimated duration)
+        const animationDuration = getAnimationDuration(title);
+        setTimeout(() => {
+          setIsPlaying(false);
+        }, animationDuration);
+      }
+    }
+  };
 
-interface HingeProps {
-  children: React.ReactNode;
-}
+  const getAnimationDuration = (animationTitle) => {
+    const durations = {
+      'Fade In': 1000,
+      'Slide In': 800,
+      'Scale': 600,
+      'Flip': 1000,
+      'Shake': 800,
+      'Wobble': 1000,
+      'Zoom In': 600,
+      'Light Speed In': 1000,
+      'Roll In': 800,
+      'Hinge': 2000,
+      'Rubber Band': 1000,
+      'Flash': 1000,
+      'Jello': 1000,
+      'Tada': 1000,
+      'Swing': 1000,
+      'Zoom Out': 600,
+      'Light Speed Out': 1000,
+    };
+    return durations[animationTitle] || 1000;
+  };
 
-const Hinge: React.FC<HingeProps> = ({ children }) => {
+  // Function to get appropriate animation class for buttons based on the card's animation
+  const getButtonAnimation = (animationTitle, buttonType) => {
+    const animationMap = {
+      'Bounce': 'hover:animate-bounce',
+      'Shake': 'hover:animate-pulse', // Using pulse as shake alternative
+      'Pulse': 'hover:animate-pulse',
+      'Rotate': 'hover:animate-spin',
+      'Scale': 'hover:scale-110 transform',
+      'Fade In': 'hover:opacity-75',
+      'Slide In': 'hover:translate-x-1 transform',
+      'Flip': 'hover:rotate-12 transform',
+      'Wobble': 'hover:animate-bounce',
+      'Zoom In': 'hover:scale-105 transform',
+      'Light Speed In': 'hover:skew-x-3 transform',
+      'Roll In': 'hover:rotate-6 transform',
+      'Hinge': 'hover:rotate-3 transform',
+      'Rubber Band': 'hover:scale-105 transform',
+      'Flash': 'hover:animate-pulse',
+      'Jello': 'hover:skew-x-2 transform',
+      'Tada': 'hover:scale-110 transform',
+      'Swing': 'hover:rotate-6 transform',
+      'Zoom Out': 'hover:scale-95 transform',
+      'Light Speed Out': 'hover:skew-x-3 transform'
+    };
+    
+    return animationMap[animationTitle] || 'hover:scale-105 transform';
+  };
+
+  // Function to handle button hover animations
+  const handleButtonHover = (e, animationTitle, buttonType) => {
+    const button = e.currentTarget;
+    
+    // Remove any existing animation classes
+    button.classList.remove('animate-bounce', 'animate-pulse', 'animate-spin');
+    
+    // Add specific animation based on the card's animation type
+    switch(animationTitle) {
+      case 'Bounce':
+        button.style.animation = 'bounce 0.5s ease-in-out';
+        break;
+      case 'Shake':
+        button.style.animation = 'shake 0.5s ease-in-out';
+        break;
+      case 'Pulse':
+        button.style.animation = 'pulse 0.5s ease-in-out';
+        break;
+      case 'Rotate':
+        button.style.transform = 'rotate(360deg)';
+        button.style.transition = 'transform 0.5s ease-in-out';
+        break;
+      case 'Wobble':
+        button.style.animation = 'wobble 0.5s ease-in-out';
+        break;
+      case 'Tada':
+        button.style.animation = 'tada 0.5s ease-in-out';
+        break;
+      case 'Swing':
+        button.style.animation = 'swing 0.5s ease-in-out';
+        break;
+      case 'Jello':
+        button.style.animation = 'jello 0.5s ease-in-out';
+        break;
+      case 'Rubber Band':
+        button.style.animation = 'rubberBand 0.5s ease-in-out';
+        break;
+      case 'Flash':
+        button.style.animation = 'flash 0.5s ease-in-out';
+        break;
+      default:
+        button.style.transform = 'scale(1.05)';
+        button.style.transition = 'transform 0.2s ease-in-out';
+    }
+    
+    // Reset after animation
+    setTimeout(() => {
+      button.style.animation = '';
+      button.style.transform = '';
+      button.style.transition = '';
+    }, 500);
+  };
+
+  // Function to handle play/pause button animations
+  const handlePlayPauseHover = (e, animationTitle) => {
+    const button = e.currentTarget;
+    
+    if (isPlaying) {
+      // If playing, show pause-related animation on hover
+      switch(animationTitle) {
+        case 'Bounce':
+          button.style.animation = 'bounce 0.3s ease-in-out';
+          break;
+        case 'Pulse':
+          button.style.animation = 'pulse 0.5s ease-in-out';
+          break;
+        case 'Rotate':
+          button.style.transform = 'rotate(180deg)';
+          button.style.transition = 'transform 0.3s ease-in-out';
+          break;
+        case 'Shake':
+          button.style.animation = 'shake 0.3s ease-in-out';
+          break;
+        case 'Wobble':
+          button.style.animation = 'wobble 0.3s ease-in-out';
+          break;
+        default:
+          button.style.transform = 'scale(0.95)';
+          button.style.transition = 'transform 0.2s ease-in-out';
+      }
+    } else {
+      // If paused, show play-related animation on hover
+      button.style.transform = 'scale(1.1)';
+      button.style.transition = 'transform 0.2s ease-in-out';
+    }
+    
+    setTimeout(() => {
+      button.style.animation = '';
+      button.style.transform = '';
+      button.style.transition = '';
+    }, 300);
+  };
+
+  useEffect(() => {
+    setIsAnimating(true);
+    setIsPlaying(true);
+    
+    // Auto-pause finite animations after they complete
+    if (!isInfinite && isAnimating) {
+      const duration = getAnimationDuration(title);
+      const timer = setTimeout(() => {
+        setIsPlaying(false);
+      }, duration);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [animationKey, title, isInfinite, isAnimating]);
+
   return (
-    <div className="hinge-animation">
-      {children}
-    </div>
-  );
-};
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
+        <h2 className="text-xl font-bold mb-1">{title}</h2>
+        <p className="text-blue-100 text-sm">{description}</p>
+      </div>
 
-// export default Hinge;
-`;
-
-const rubberBandAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes rubberBand {
-  0% { transform: scale3d(1, 1, 1); }
-  30% { transform: scale3d(1.25, 0.75, 1); }
-  40% { transform: scale3d(0.75, 1.25, 1); }
-  50% { transform: scale3d(1.15, 0.85, 1); }
-  65% { transform: scale3d(0.95, 1.05, 1); }
-  75% { transform: scale3d(1.05, 0.95, 1); }
-  100% { transform: scale3d(1, 1, 1); }
-}
-
-.rubberband-animation {
-  animation: rubberBand 1s forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface RubberBandProps {
-  children: React.ReactNode;
-}
-
-const RubberBand: React.FC<RubberBandProps> = ({ children }) => {
-  return (
-    <div className="rubberband-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default RubberBand;
-`;
-
-const flashAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes flash {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0; }
-}
-
-.flash-animation {
-  animation: flash 1s forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface FlashProps {
-  children: React.ReactNode;
-}
-
-const Flash: React.FC<FlashProps> = ({ children }) => {
-  return (
-    <div className="flash-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Flash;
-`;
-
-const jelloAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes jello {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  11.1% { transform: translate3d(0, 0, 0); }
-  22.2% { transform: skewX(-12.5deg) skewY(-12.5deg); }
-  33.3% { transform: skewX(6.25deg) skewY(6.25deg); }
-  44.4% { transform: skewX(-3.125deg) skewY(-3.125deg); }
-  55.5% { transform: skewX(1.5625deg) skewY(1.5625deg); }
-  66.6% { transform: skewX(-0.78125deg) skewY(-0.78125deg); }
-  77.7% { transform: skewX(0.390625deg) skewY(0.390625deg); }
-  88.8% { transform: skewX(-0.1953125deg) skewY(-0.1953125deg); }
-}
-
-.jello-animation {
-  animation: jello 1s forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface JelloProps {
-  children: React.ReactNode;
-}
-
-const Jello: React.FC<JelloProps> = ({ children }) => {
-  return (
-    <div className="jello-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Jello;
-`;
-
-const tadaAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes tada {
-  from {
-    transform: scale3d(1, 1, 1);
-  }
-  10%, 20% {
-    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
-  }
-  30%, 50%, 70%, 90% {
-    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-  }
-  40%, 60%, 80% {
-    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-  }
-  to {
-    transform: scale3d(1, 1, 1);
-  }
-}
-
-.tada-animation {
-  animation: tada 1s forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface TadaProps {
-  children: React.ReactNode;
-}
-
-const Tada: React.FC<TadaProps> = ({ children }) => {
-  return (
-    <div className="tada-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Tada;
-`;
-
-const swingAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes swing {
-  20% { transform: rotate3d(0, 0, 1, 15deg); }
-  40% { transform: rotate3d(0, 0, 1, -10deg); }
-  60% { transform: rotate3d(0, 0, 1, 5deg); }
-  80% { transform: rotate3d(0, 0, 1, -5deg); }
-  100% { transform: rotate3d(0, 0, 1, 0deg); }
-}
-
-.swing-animation {
-  transform-origin: top center;
-  animation: swing 1s ease-in-out forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface SwingProps {
-  children: React.ReactNode;
-}
-
-const Swing: React.FC<SwingProps> = ({ children }) => {
-  return (
-    <div className="swing-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Swing;
-`;
-
-const zoomOutAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes zoomOut {
-  from { opacity: 1; }
-  50% { opacity: 0; transform: scale3d(.3, .3, .3); }
-  to { opacity: 0; }
-}
-
-.zoom-out {
-  animation: zoomOut 0.6s ease-out forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface ZoomOutProps {
-  children: React.ReactNode;
-  delay?: number;
-}
-
-const ZoomOut: React.FC<ZoomOutProps> = ({ children, delay = 0 }) => {
-  return (
-    <div
-      className="zoom-out"
-      style={{ animationDelay: `\\`${delay}s\\`` }}
-    >
-      {children}
-    </div>
-  );
-};
-
-// export default ZoomOut;
-`;
-
-const lightSpeedOutAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes lightSpeedOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    transform: translate3d(100%, 0, 0) skewX(30deg);
-    opacity: 0;
-  }
-}
-
-.lightspeed-out {
-  animation: lightSpeedOut 1s ease-in forwards;
-}
-
-// React Component
-// import React from 'react';
-
-interface LightSpeedOutProps {
-  children: React.ReactNode;
-}
-
-const LightSpeedOut: React.FC<LightSpeedOutProps> = ({ children }) => {
-  return (
-    <div className="lightspeed-out">
-      {children}
-    </div>
-  );
-};
-
-// export default LightSpeedOut;
-`;
-
-const bounceAnimationCode = String.raw`// CSS (e.g., App.css or a global CSS file)
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-30px); }
-  60% { transform: translateY(-15px); }
-}
-
-.bounce-animation {
-  animation: bounce 2s infinite;
-}
-
-// React Component
-// import React from 'react';
-
-interface BounceProps {
-  children: React.ReactNode;
-}
-
-const Bounce: React.FC<BounceProps> = ({ children }) => {
-  return (
-    <div className="bounce-animation">
-      {children}
-    </div>
-  );
-};
-
-// export default Bounce;
-`;
-
-const Animations = () => {
-  return (
-    <div className="container mx-auto px-6 py-8">
-      <h1 className="text-4xl font-bold mb-8">Animations</h1>
-      <p className="text-muted-foreground mb-12">Explore and copy-paste ready-to-use animations.</p>
-
-      <div className="grid grid-cols-1 gap-8">
-        {/* Fade In Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Fade In</h2>
-          <p className="text-muted-foreground mb-4">A simple fade-in animation for elements.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: fadeInAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(fadeInAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="fade-in text-lg font-medium">Fade In Example</div>
+      {/* Preview Section */}
+      <div className="p-6">
+        <div className="mb-4">
+          <h4 className="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+            Live Preview
+          </h4>
+          <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg p-8 min-h-[140px] flex items-center justify-center overflow-hidden relative">
+            {/* Animation Status Indicator */}
+            <div className="absolute top-2 right-2 flex items-center gap-1">
+              <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+              <span className="text-xs text-gray-500 font-medium">
+                {isPlaying ? (isInfinite ? 'Playing' : 'Playing') : 'Paused'}
+              </span>
+            </div>
+            
+            <div 
+              key={animationKey}
+              className={isAnimating && isPlaying ? animationClass : ''}
+              style={{ 
+                visibility: 'visible',
+                opacity: (!isAnimating || !isPlaying) ? 1 : undefined,
+                transform: (!isAnimating || !isPlaying) ? 'none' : undefined,
+                animationPlayState: isPlaying ? 'running' : 'paused'
+              }}
+            >
+              <div className="text-lg font-semibold text-gray-700 bg-white px-4 py-2 rounded-lg shadow-sm border">
+                {children || title}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Slide In Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Slide In</h2>
-          <p className="text-muted-foreground mb-4">An animation that slides elements in from the left.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: slideInAnimationCode }}>
-              </code>
-            </pre>
-          </div>
+        {/* Control Buttons */}
+        <div className="flex gap-2 mb-4">
           <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(slideInAnimationCode)}
+            className={`flex-1 px-3 py-2 text-sm rounded-md transition-all duration-200 flex items-center justify-center gap-2 ${
+              isPlaying 
+                ? 'bg-red-600 text-white hover:bg-red-700' 
+                : 'bg-green-600 text-white hover:bg-green-700'
+            } ${getButtonAnimation(title, 'playPause')}`}
+            onClick={handlePlayPause}
+            onMouseEnter={(e) => handlePlayPauseHover(e, title)}
           >
-            Copy Code
+            {isPlaying ? (
+              <>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+                Pause
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <polygon points="5,3 19,12 5,21"></polygon>
+                </svg>
+                Play
+              </>
+            )}
           </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="slide-in text-lg font-medium">Slide In Example</div>
-          </div>
+          <button 
+            className={`flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-md transition-all duration-200 flex items-center justify-center gap-2 ${
+              getButtonAnimation(title, 'replay')
+            }`}
+            onClick={handleReplay}
+            onMouseEnter={(e) => handleButtonHover(e, title, 'replay')}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Replay
+          </button>
         </div>
 
-        {/* Rotate Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Rotate</h2>
-          <p className="text-muted-foreground mb-4">A continuous rotation animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: rotateAnimationCode }}>
-              </code>
+        {/* Code Section */}
+        <div className="bg-gray-900 rounded-lg p-4 mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs text-gray-400 font-mono">CSS & React Code</span>
+            <button 
+              className={`px-3 py-1 text-xs rounded transition-all duration-200 ${
+                copyStatus === 'Copied!' 
+                  ? 'bg-green-600 text-white scale-110 transform' 
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:scale-105 transform'
+              } ${getButtonAnimation(title, 'copy')}`}
+              onClick={handleCopy}
+              onMouseEnter={(e) => handleButtonHover(e, title, 'copy')}
+            >
+              {copyStatus}
+            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <pre className="text-sm text-gray-300">
+              <code>{code}</code>
             </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(rotateAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="rotate-animation text-lg font-medium">Rotate Example</div>
-          </div>
-        </div>
-
-        {/* Scale Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Scale</h2>
-          <p className="text-muted-foreground mb-4">An animation that scales elements in.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: scaleAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(scaleAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="scale-animation text-lg font-medium">Scale Example</div>
-          </div>
-        </div>
-
-        {/* Pulse Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Pulse</h2>
-          <p className="text-muted-foreground mb-4">A subtle pulsing animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: pulseAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(pulseAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="pulse-animation text-lg font-medium">Pulse Example</div>
-          </div>
-        </div>
-
-        {/* Flip Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Flip</h2>
-          <p className="text-muted-foreground mb-4">A 3D flip animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: flipAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(flipAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="flip-animation text-lg font-medium">Flip Example</div>
-          </div>
-        </div>
-
-        {/* Shake Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Shake</h2>
-          <p className="text-muted-foreground mb-4">A shaking animation, useful for error feedback.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: shakeAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(shakeAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="shake-animation text-lg font-medium">Shake Example</div>
-          </div>
-        </div>
-
-        {/* Wobble Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Wobble</h2>
-          <p className="text-muted-foreground mb-4">A wobbling animation effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: wobbleAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(wobbleAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="wobble-animation text-lg font-medium">Wobble Example</div>
-          </div>
-        </div>
-
-        {/* Zoom In Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Zoom In</h2>
-          <p className="text-muted-foreground mb-4">A zoom-in animation effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: zoomInAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(zoomInAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="zoom-in text-lg font-medium">Zoom In Example</div>
-          </div>
-        </div>
-
-        {/* Light Speed In Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Light Speed In</h2>
-          <p className="text-muted-foreground mb-4">An animation that slides in quickly like a light speed effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: lightSpeedInAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(lightSpeedInAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="lightspeed-in text-lg font-medium">Light Speed In Example</div>
-          </div>
-        </div>
-
-        {/* Roll In Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Roll In</h2>
-          <p className="text-muted-foreground mb-4">An animation that rolls in from the left.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: rollInAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(rollInAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="roll-in text-lg font-medium">Roll In Example</div>
-          </div>
-        </div>
-
-        {/* Hinge Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Hinge</h2>
-          <p className="text-muted-foreground mb-4">An animation that swings an element like a hinge.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: hingeAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(hingeAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="hinge-animation text-lg font-medium">Hinge Example</div>
-          </div>
-        </div>
-
-        {/* Rubber Band Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Rubber Band</h2>
-          <p className="text-muted-foreground mb-4">A rubber band effect animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: rubberBandAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(rubberBandAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="rubberband-animation text-lg font-medium">Rubber Band Example</div>
-          </div>
-        </div>
-
-        {/* Flash Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Flash</h2>
-          <p className="text-muted-foreground mb-4">A quick flash effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: flashAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(flashAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="flash-animation text-lg font-medium">Flash Example</div>
-          </div>
-        </div>
-
-        {/* Jello Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Jello</h2>
-          <p className="text-muted-foreground mb-4">A jello-like wobbling animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: jelloAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(jelloAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="jello-animation text-lg font-medium">Jello Example</div>
-          </div>
-        </div>
-
-        {/* Tada Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Tada</h2>
-          <p className="text-muted-foreground mb-4">A fun, emphatic animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: tadaAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(tadaAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="tada-animation text-lg font-medium">Tada Example</div>
-          </div>
-        </div>
-
-        {/* Swing Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Swing</h2>
-          <p className="text-muted-foreground mb-4">A swinging animation effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: swingAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(swingAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="swing-animation text-lg font-medium">Swing Example</div>
-          </div>
-        </div>
-
-        {/* Zoom Out Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Zoom Out</h2>
-          <p className="text-muted-foreground mb-4">A zoom-out animation effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: zoomOutAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(zoomOutAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="zoom-out text-lg font-medium">Zoom Out Example</div>
-          </div>
-        </div>
-
-        {/* Light Speed Out Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Light Speed Out</h2>
-          <p className="text-muted-foreground mb-4">An animation that slides out quickly like a light speed effect.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: lightSpeedOutAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(lightSpeedOutAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="lightspeed-out text-lg font-medium">Light Speed Out Example</div>
-          </div>
-        </div>
-
-        {/* Bounce Animation */}
-        <div className="bg-card p-6 rounded-lg border border-border shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Bounce</h2>
-          <p className="text-muted-foreground mb-4">A classic bouncing animation.</p>
-          <div className="bg-gray-900 rounded-md p-4 mb-4 overflow-x-auto">
-            <pre>
-              <code className="language-css text-white"
-                dangerouslySetInnerHTML={{ __html: bounceAnimationCode }}>
-              </code>
-            </pre>
-          </div>
-          <button 
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => navigator.clipboard.writeText(bounceAnimationCode)}
-          >
-            Copy Code
-          </button>
-          <div className="mt-6 p-4 border border-dashed border-muted-foreground rounded-md text-center">
-            <div className="bounce-animation inline-block p-2 bg-primary rounded-md text-white">Bounce Example</div>
           </div>
         </div>
       </div>
@@ -1101,4 +493,195 @@ const Animations = () => {
   );
 };
 
-export default Animations; 
+// --- Main Animations Component ---
+const Animations = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  useEffect(() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = allAnimationsCSS;
+    document.head.appendChild(styleElement);
+    return () => {
+      if (document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement);
+      }
+    };
+  }, []);
+
+  const animationData = [
+    { title: 'Fade In', description: 'A smooth opacity transition from invisible to visible', animationClass: 'fade-in', code: fadeInAnimationCode, category: 'entrance', content: '✨ Fade In' },
+    { title: 'Slide In', description: 'Slides element from left with smooth easing', animationClass: 'slide-in', code: slideInAnimationCode, category: 'entrance', content: '➡️ Slide In' },
+    { title: 'Rotate', description: 'Continuous 360-degree rotation animation', animationClass: 'rotate-animation', code: rotateAnimationCode, category: 'attention', content: '🔄', isInfinite: true },
+    { title: 'Scale', description: 'Grows element from small to normal size', animationClass: 'scale-animation', code: scaleAnimationCode, category: 'entrance', content: '📈 Scale' },
+    { title: 'Pulse', description: 'Subtle breathing effect with scale variation', animationClass: 'pulse-animation', code: pulseAnimationCode, category: 'attention', content: '💓 Pulse', isInfinite: true },
+    { title: 'Flip', description: '3D flip animation with perspective effect', animationClass: 'flip-animation', code: flipAnimationCode, category: 'entrance', content: '🔄 Flip' },
+    { title: 'Shake', description: 'Horizontal shaking motion for alerts', animationClass: 'shake-animation', code: shakeAnimationCode, category: 'attention', content: '⚡ Shake' },
+    { title: 'Bounce', description: 'Classic bouncing ball physics animation', animationClass: 'bounce-animation', code: bounceAnimationCode, category: 'attention', content: '🏀 Bounce', isInfinite: true },
+    { title: 'Wobble', description: 'Playful wobbling motion with rotation', animationClass: 'wobble-animation', code: wobbleAnimationCode, category: 'attention', content: '🌊 Wobble' },
+    { title: 'Zoom In', description: 'Dramatic zoom entrance with 3D scaling', animationClass: 'zoom-in', code: zoomInAnimationCode, category: 'entrance', content: '🔍 Zoom In' },
+    { title: 'Light Speed In', description: 'Ultra-fast entrance with motion blur effect', animationClass: 'lightspeed-in', code: lightSpeedInAnimationCode, category: 'entrance', content: '⚡ Light Speed' },
+    { title: 'Roll In', description: 'Rolling entrance like a wheel', animationClass: 'roll-in', code: rollInAnimationCode, category: 'entrance', content: '🎯 Roll In' },
+    { title: 'Hinge', description: 'Dramatic exit animation like a falling door', animationClass: 'hinge-animation', code: hingeAnimationCode, category: 'exit', content: '🚪 Hinge' },
+    { title: 'Rubber Band', description: 'Elastic stretching effect like rubber', animationClass: 'rubberband-animation', code: rubberBandAnimationCode, category: 'attention', content: '🎈 Rubber Band' },
+    { title: 'Flash', description: 'Strobing visibility effect', animationClass: 'flash-animation', code: flashAnimationCode, category: 'attention', content: '💡 Flash' },
+    { title: 'Jello', description: 'Gelatinous wobble with skew transforms', animationClass: 'jello-animation', code: jelloAnimationCode, category: 'attention', content: '🍮 Jello' },
+    { title: 'Tada', description: 'Celebratory attention-grabbing animation', animationClass: 'tada-animation', code: tadaAnimationCode, category: 'attention', content: '🎉 Tada!' },
+    { title: 'Swing', description: 'Pendulum-like swinging motion', animationClass: 'swing-animation', code: swingAnimationCode, category: 'attention', content: '🎪 Swing' },
+    { title: 'Zoom Out', description: 'Shrinking exit animation', animationClass: 'zoom-out', code: zoomOutAnimationCode, category: 'exit', content: '🔍 Zoom Out' },
+    { title: 'Light Speed Out', description: 'Ultra-fast exit with motion blur', animationClass: 'lightspeed-out', code: lightSpeedOutAnimationCode, category: 'exit', content: '⚡ Light Exit' },
+  ];
+
+  const categories = [
+    { value: 'all', label: 'All Animations', count: animationData.length },
+    { value: 'entrance', label: 'Entrance', count: animationData.filter(a => a.category === 'entrance').length },
+    { value: 'attention', label: 'Attention', count: animationData.filter(a => a.category === 'attention').length },
+    { value: 'exit', label: 'Exit', count: animationData.filter(a => a.category === 'exit').length },
+  ];
+
+  const filteredAnimations = animationData.filter(anim => {
+    const matchesSearch = anim.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         anim.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || anim.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <header className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            React & CSS Animations
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">Interactive preview of 20 ready-to-use animations for your projects</p>
+          
+          {/* Search and Filter */}
+          <div className="max-w-2xl mx-auto space-y-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search animations..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+              />
+              <svg className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-2">
+              {categories.map(category => (
+                <button
+                  key={category.value}
+                  onClick={() => setSelectedCategory(category.value)}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05) rotate(2deg)';
+                    e.currentTarget.style.transition = 'all 0.2s ease-in-out';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = selectedCategory === category.value ? 'scale(1.05)' : 'scale(1)';
+                    e.currentTarget.style.transition = 'all 0.2s ease-in-out';
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    selectedCategory === category.value
+                      ? 'bg-blue-600 text-white shadow-lg transform scale-105'
+                      : 'bg-white text-gray-600 hover:bg-gray-100 shadow-sm'
+                  }`}
+                >
+                  {category.label} ({category.count})
+                </button>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        {/* Results Count */}
+        <div className="text-center mb-6">
+          <p className="text-gray-600">
+            Showing {filteredAnimations.length} of {animationData.length} animations
+          </p>
+        </div>
+
+        {/* Animation Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {filteredAnimations.map(anim => (
+            <div
+              key={anim.title}
+              onMouseEnter={(e) => {
+                const card = e.currentTarget;
+                switch(anim.title) {
+                  case 'Bounce':
+                    card.style.animation = 'bounce 0.6s ease-in-out';
+                    break;
+                  case 'Shake':
+                    card.style.animation = 'shake 0.6s ease-in-out';
+                    break;
+                  case 'Pulse':
+                    card.style.animation = 'pulse 1s ease-in-out';
+                    break;
+                  case 'Wobble':
+                    card.style.animation = 'wobble 0.6s ease-in-out';
+                    break;
+                  case 'Tada':
+                    card.style.animation = 'tada 0.6s ease-in-out';
+                    break;
+                  case 'Swing':
+                    card.style.animation = 'swing 0.6s ease-in-out';
+                    break;
+                  case 'Jello':
+                    card.style.animation = 'jello 0.6s ease-in-out';
+                    break;
+                  case 'Rubber Band':
+                    card.style.animation = 'rubberBand 0.6s ease-in-out';
+                    break;
+                  case 'Flash':
+                    card.style.animation = 'flash 0.6s ease-in-out';
+                    break;
+                  case 'Scale':
+                    card.style.transform = 'scale(1.02)';
+                    card.style.transition = 'transform 0.3s ease-in-out';
+                    break;
+                  case 'Rotate':
+                    card.style.transform = 'rotate(5deg) scale(1.02)';
+                    card.style.transition = 'transform 0.3s ease-in-out';
+                    break;
+                  default:
+                    card.style.transform = 'translateY(-4px) scale(1.01)';
+                    card.style.transition = 'all 0.3s ease-in-out';
+                }
+              }}
+              onMouseLeave={(e) => {
+                const card = e.currentTarget;
+                card.style.animation = '';
+                card.style.transform = '';
+                card.style.transition = 'all 0.3s ease-in-out';
+              }}
+            >
+              <AnimationCard 
+                title={anim.title}
+                description={anim.description}
+                animationClass={anim.animationClass}
+                code={anim.code}
+                isInfinite={anim.isInfinite}
+              >
+                {anim.content}
+              </AnimationCard>
+            </div>
+          ))}
+        </div>
+
+        {filteredAnimations.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">No animations found</h3>
+            <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Animations;
