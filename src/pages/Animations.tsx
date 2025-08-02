@@ -384,25 +384,25 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
   }, [animationKey, title, isInfinite, isAnimating]);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
+      <div className="bg-gradient-primary text-white p-4">
         <h2 className="text-xl font-bold mb-1">{title}</h2>
-        <p className="text-blue-100 text-sm">{description}</p>
+        <p className="text-primary-foreground/80 text-sm">{description}</p>
       </div>
 
       {/* Preview Section */}
       <div className="p-6">
         <div className="mb-4">
-          <h4 className="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+          <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 bg-accent rounded-full"></span>
             Live Preview
           </h4>
-          <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg p-8 min-h-[140px] flex items-center justify-center overflow-hidden relative">
+          <div className="bg-muted/20 border-2 border-dashed border-border rounded-lg p-8 min-h-[140px] flex items-center justify-center overflow-hidden relative">
             {/* Animation Status Indicator */}
             <div className="absolute top-2 right-2 flex items-center gap-1">
-              <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-              <span className="text-xs text-gray-500 font-medium">
+              <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-accent animate-pulse' : 'bg-destructive'}`}></div>
+              <span className="text-xs text-muted-foreground font-medium">
                 {isPlaying ? (isInfinite ? 'Playing' : 'Playing') : 'Paused'}
               </span>
             </div>
@@ -417,7 +417,7 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
                 animationPlayState: isPlaying ? 'running' : 'paused'
               }}
             >
-              <div className="text-lg font-semibold text-gray-700 bg-white px-4 py-2 rounded-lg shadow-sm border">
+              <div className="text-lg font-semibold text-foreground bg-card px-4 py-2 rounded-lg shadow-sm border border-border">
                 {children || title}
               </div>
             </div>
@@ -429,8 +429,8 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
           <button 
             className={`flex-1 px-3 py-2 text-sm rounded-md transition-all duration-200 flex items-center justify-center gap-2 ${
               isPlaying 
-                ? 'bg-red-600 text-white hover:bg-red-700' 
-                : 'bg-green-600 text-white hover:bg-green-700'
+                ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' 
+                : 'bg-accent text-accent-foreground hover:bg-accent/90'
             } ${getButtonAnimation(title, 'playPause')}`}
             onClick={handlePlayPause}
             onMouseEnter={(e) => handlePlayPauseHover(e, title)}
@@ -453,7 +453,7 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
             )}
           </button>
           <button 
-            className={`flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-md transition-all duration-200 flex items-center justify-center gap-2 ${
+            className={`flex-1 px-3 py-2 text-sm bg-primary text-primary-foreground rounded-md transition-all duration-200 flex items-center justify-center gap-2 hover:bg-primary/90 ${
               getButtonAnimation(title, 'replay')
             }`}
             onClick={handleReplay}
@@ -467,14 +467,14 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
         </div>
 
         {/* Code Section */}
-        <div className="bg-gray-900 rounded-lg p-4 mb-4">
+        <div className="bg-background border border-border rounded-lg p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-xs text-gray-400 font-mono">CSS & React Code</span>
+            <span className="text-xs text-muted-foreground font-mono">CSS & React Code</span>
             <button 
               className={`px-3 py-1 text-xs rounded transition-all duration-200 ${
                 copyStatus === 'Copied!' 
-                  ? 'bg-green-600 text-white scale-110 transform' 
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:scale-105 transform'
+                  ? 'bg-accent text-accent-foreground scale-110 transform' 
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105 transform'
               } ${getButtonAnimation(title, 'copy')}`}
               onClick={handleCopy}
               onMouseEnter={(e) => handleButtonHover(e, title, 'copy')}
@@ -483,7 +483,7 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
             </button>
           </div>
           <div className="overflow-x-auto">
-            <pre className="text-sm text-gray-300">
+            <pre className="text-sm text-foreground">
               <code>{code}</code>
             </pre>
           </div>
@@ -547,14 +547,14 @@ const Animations = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-hero">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <header className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <header className="text-center mb-12 animate-fade-in">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
             React & CSS Animations
           </h1>
-          <p className="text-xl text-gray-600 mb-8">Interactive preview of 20 ready-to-use animations for your projects</p>
+          <p className="text-xl text-muted-foreground mb-8">Interactive preview of 20 ready-to-use animations for your projects</p>
           
           {/* Search and Filter */}
           <div className="max-w-2xl mx-auto space-y-4">
@@ -564,9 +564,9 @@ const Animations = () => {
                 placeholder="Search animations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                className="w-full px-4 py-3 pl-12 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent shadow-sm"
               />
-              <svg className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="absolute left-4 top-3.5 w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -586,8 +586,8 @@ const Animations = () => {
                   }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     selectedCategory === category.value
-                      ? 'bg-blue-600 text-white shadow-lg transform scale-105'
-                      : 'bg-white text-gray-600 hover:bg-gray-100 shadow-sm'
+                      ? 'bg-primary text-primary-foreground shadow-lg transform scale-105'
+                      : 'bg-card text-card-foreground hover:bg-muted shadow-sm'
                   }`}
                 >
                   {category.label} ({category.count})
@@ -599,7 +599,7 @@ const Animations = () => {
 
         {/* Results Count */}
         <div className="text-center mb-6">
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Showing {filteredAnimations.length} of {animationData.length} animations
           </p>
         </div>
@@ -675,8 +675,8 @@ const Animations = () => {
         {filteredAnimations.length === 0 && (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">No animations found</h3>
-            <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+            <h3 className="text-xl font-semibold text-foreground mb-2">No animations found</h3>
+            <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
           </div>
         )}
       </div>
