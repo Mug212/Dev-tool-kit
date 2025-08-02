@@ -30,7 +30,15 @@ const Dashboard = () => {
       case 'animations':
         navigate('/animations');
         break;
-      // Add more navigation cases as we create more pages
+      case 'utilities':
+        navigate('/developer-utilities');
+        break;
+      case 'design-tools':
+        navigate('/design-tools');
+        break;
+      case '3d-elements':
+        navigate('/3d-elements');
+        break;
       default:
         console.log(`Opening ${toolId}`);
     }
