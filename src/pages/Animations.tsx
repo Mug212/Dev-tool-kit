@@ -1,5 +1,176 @@
 import React, { useEffect, useState } from 'react';
 
+// --- Live Animation Components ---
+const FadeInDemo = ({ isActive, delay = 0 }) => (
+  <div 
+    className={`inline-block transition-all duration-1000 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+    style={{ transitionDelay: `${delay}ms` }}
+  >
+    <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium">
+      Fade In Effect
+    </div>
+  </div>
+);
+
+const SlideInDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block transition-all duration-800 ${isActive ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}
+  >
+    <div className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg font-medium">
+      Slide In Effect
+    </div>
+  </div>
+);
+
+const RotateDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block transition-transform duration-2000 ${isActive ? 'rotate-360' : 'rotate-0'}`}
+  >
+    <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-medium flex items-center gap-2">
+      <span>🔄</span> Rotate
+    </div>
+  </div>
+);
+
+const ScaleDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block transition-all duration-600 ${isActive ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`}
+  >
+    <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium">
+      Scale Effect
+    </div>
+  </div>
+);
+
+const PulseDemo = ({ isActive }) => (
+  <div className={`inline-block ${isActive ? 'animate-pulse' : ''}`}>
+    <div className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg font-medium">
+      Pulse Effect
+    </div>
+  </div>
+);
+
+const BounceDemo = ({ isActive }) => (
+  <div className={`inline-block ${isActive ? 'animate-bounce' : ''}`}>
+    <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-medium">
+      Bounce Effect
+    </div>
+  </div>
+);
+
+const ShakeDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block ${isActive ? 'animate-shake' : ''}`}
+    style={{
+      animation: isActive ? 'shake 0.8s cubic-bezier(.36,.07,.19,.97)' : 'none'
+    }}
+  >
+    <div className="bg-destructive text-destructive-foreground px-4 py-2 rounded-lg font-medium">
+      Shake Effect
+    </div>
+  </div>
+);
+
+const FlipDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block transition-all duration-1000 preserve-3d ${isActive ? 'rotate-y-0' : 'rotate-y-90'}`}
+    style={{
+      transform: isActive ? 'perspective(400px) rotateY(0deg)' : 'perspective(400px) rotateY(90deg)',
+      opacity: isActive ? 1 : 0
+    }}
+  >
+    <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium">
+      Flip Effect
+    </div>
+  </div>
+);
+
+const WobbleDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block ${isActive ? 'animate-wobble' : ''}`}
+    style={{
+      animation: isActive ? 'wobble 1s ease-in-out' : 'none'
+    }}
+  >
+    <div className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg font-medium">
+      Wobble Effect
+    </div>
+  </div>
+);
+
+const ZoomInDemo = ({ isActive }) => (
+  <div 
+    className={`inline-block transition-all duration-600 ${isActive ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}
+  >
+    <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-medium">
+      Zoom In Effect
+    </div>
+  </div>
+);
+
+// Add custom keyframes to the component
+const customAnimations = `
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+  20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+@keyframes wobble {
+  0% { transform: translateX(0%); }
+  15% { transform: translateX(-25%) rotate(-5deg); }
+  30% { transform: translateX(20%) rotate(3deg); }
+  45% { transform: translateX(-15%) rotate(-3deg); }
+  60% { transform: translateX(10%) rotate(2deg); }
+  75% { transform: translateX(-5%) rotate(-1deg); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes rubberBand {
+  0% { transform: scale3d(1, 1, 1); }
+  30% { transform: scale3d(1.25, 0.75, 1); }
+  40% { transform: scale3d(0.75, 1.25, 1); }
+  50% { transform: scale3d(1.15, 0.85, 1); }
+  65% { transform: scale3d(.95, 1.05, 1); }
+  75% { transform: scale3d(1.05, .95, 1); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+
+@keyframes tada {
+  from { transform: scale3d(1, 1, 1); }
+  10%, 20% { transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg); }
+  30%, 50%, 70%, 90% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg); }
+  40%, 60%, 80% { transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg); }
+  to { transform: scale3d(1, 1, 1); }
+}
+
+@keyframes jello {
+  0%, 11.1%, 100% { transform: none; }
+  22.2% { transform: skewX(-12.5deg) skewY(-12.5deg); }
+  33.3% { transform: skewX(6.25deg) skewY(6.25deg); }
+  44.4% { transform: skewX(-3.125deg) skewY(-3.125deg); }
+  55.5% { transform: skewX(1.5625deg) skewY(1.5625deg); }
+  66.6% { transform: skewX(-0.78125deg) skewY(-0.78125deg); }
+  77.7% { transform: skewX(0.390625deg) skewY(0.390625deg); }
+  88.8% { transform: skewX(-0.1953125deg) skewY(-0.1953125deg); }
+}
+
+@keyframes swing {
+  20% { transform: rotate3d(0, 0, 1, 15deg); }
+  40% { transform: rotate3d(0, 0, 1, -10deg); }
+  60% { transform: rotate3d(0, 0, 1, 5deg); }
+  80% { transform: rotate3d(0, 0, 1, -5deg); }
+  100% { transform: rotate3d(0, 0, 1, 0deg); }
+}
+
+.animate-shake { animation: shake 0.8s cubic-bezier(.36,.07,.19,.97); }
+.animate-wobble { animation: wobble 1s ease-in-out; }
+.animate-rubberBand { animation: rubberBand 1s forwards; }
+.animate-tada { animation: tada 1s forwards; }
+.animate-jello { animation: jello 1s forwards; }
+.animate-swing { animation: swing 1s ease-in-out; transform-origin: top center; }
+`;
+
 // --- Animation Code Snippets for Display & Copying ---
 const fadeInAnimationCode = String.raw`// CSS
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -407,20 +578,34 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
               </span>
             </div>
             
-            <div 
-              key={animationKey}
-              className={isAnimating && isPlaying ? animationClass : ''}
-              style={{ 
-                visibility: 'visible',
-                opacity: (!isAnimating || !isPlaying) ? 1 : undefined,
-                transform: (!isAnimating || !isPlaying) ? 'none' : undefined,
-                animationPlayState: isPlaying ? 'running' : 'paused'
-              }}
-            >
-              <div className="text-lg font-semibold text-foreground bg-card px-4 py-2 rounded-lg shadow-sm border border-border">
-                {children || title}
+            {title === 'Fade In' && <FadeInDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Slide In' && <SlideInDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Rotate' && <RotateDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Scale' && <ScaleDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Pulse' && <PulseDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Bounce' && <BounceDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Shake' && <ShakeDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Flip' && <FlipDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Wobble' && <WobbleDemo isActive={isAnimating && isPlaying} />}
+            {title === 'Zoom In' && <ZoomInDemo isActive={isAnimating && isPlaying} />}
+            
+            {/* For other animations, use fallback */}
+            {!['Fade In', 'Slide In', 'Rotate', 'Scale', 'Pulse', 'Bounce', 'Shake', 'Flip', 'Wobble', 'Zoom In'].includes(title) && (
+              <div 
+                key={animationKey}
+                className={isAnimating && isPlaying ? animationClass : ''}
+                style={{ 
+                  visibility: 'visible',
+                  opacity: (!isAnimating || !isPlaying) ? 1 : undefined,
+                  transform: (!isAnimating || !isPlaying) ? 'none' : undefined,
+                  animationPlayState: isPlaying ? 'running' : 'paused'
+                }}
+              >
+                <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium">
+                  {children || title}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -473,8 +658,8 @@ const AnimationCard = ({ title, description, animationClass, code, children, isI
             <button 
               className={`px-3 py-1 text-xs rounded transition-all duration-200 ${
                 copyStatus === 'Copied!' 
-                  ? 'bg-accent text-accent-foreground scale-110 transform' 
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105 transform'
+                  ? 'bg-primary text-primary-foreground scale-110 transform' 
+                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:scale-105 transform'
               } ${getButtonAnimation(title, 'copy')}`}
               onClick={handleCopy}
               onMouseEnter={(e) => handleButtonHover(e, title, 'copy')}
@@ -500,7 +685,7 @@ const Animations = () => {
 
   useEffect(() => {
     const styleElement = document.createElement('style');
-    styleElement.innerHTML = allAnimationsCSS;
+    styleElement.innerHTML = allAnimationsCSS + customAnimations;
     document.head.appendChild(styleElement);
     return () => {
       if (document.head.contains(styleElement)) {

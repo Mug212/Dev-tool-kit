@@ -112,6 +112,9 @@ export default {
 				'fade-in': 'fade-in 0.5s ease-out',
 				'glow': 'glow 2s ease-in-out infinite'
 			},
+			rotate: {
+				'360': '360deg'
+			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-accent': 'var(--gradient-accent)',
