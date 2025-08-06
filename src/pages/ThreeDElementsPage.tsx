@@ -531,229 +531,421 @@ const ThreeDElementsPage = () => {
 
   const render3DElement = (elementKey: string) => {
     const commonProps = {
-      camera: { position: [2, 2, 2] as [number, number, number], fov: 50 },
-      style: { background: 'transparent' }
+      camera: { position: [3, 3, 3] as [number, number, number], fov: 45 },
+      style: { background: 'linear-gradient(135deg, rgba(0,0,0,0.1), rgba(255,255,255,0.05))' },
+      gl: { antialias: true, alpha: true }
     };
 
     switch (elementKey) {
       case 'rectangle':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <boxGeometry args={[2, 1, 0.5]} />
-              <meshStandardMaterial color="#4CAF50" />
+              <boxGeometry args={[1.5, 0.8, 0.4]} />
+              <meshStandardMaterial 
+                color="hsl(var(--primary))" 
+                metalness={0.3} 
+                roughness={0.4} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'sphere':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <sphereGeometry args={[1, 32, 32]} />
-              <meshStandardMaterial color="#2196F3" />
+              <sphereGeometry args={[0.8, 32, 32]} />
+              <meshStandardMaterial 
+                color="hsl(var(--accent))" 
+                metalness={0.2} 
+                roughness={0.3} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1.5}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'cone':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <coneGeometry args={[1, 2, 32]} />
-              <meshStandardMaterial color="#FF9800" />
+              <coneGeometry args={[0.8, 1.6, 32]} />
+              <meshStandardMaterial 
+                color="#FF9800" 
+                metalness={0.4} 
+                roughness={0.2} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={2}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'cylinder':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <cylinderGeometry args={[1, 1, 2, 32]} />
-              <meshStandardMaterial color="#9C27B0" />
+              <cylinderGeometry args={[0.8, 0.8, 1.6, 32]} />
+              <meshStandardMaterial 
+                color="#9C27B0" 
+                metalness={0.3} 
+                roughness={0.3} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'torus':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <torusGeometry args={[1, 0.4, 16, 100]} />
-              <meshStandardMaterial color="#E91E63" />
+              <torusGeometry args={[0.8, 0.3, 16, 100]} />
+              <meshStandardMaterial 
+                color="#E91E63" 
+                metalness={0.2} 
+                roughness={0.4} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1.5}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'plane':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[2, 2]} />
-              <meshStandardMaterial color="#607D8B" />
+              <meshStandardMaterial 
+                color="#607D8B" 
+                metalness={0.1} 
+                roughness={0.8} 
+                side={2}
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={0.5}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'octahedron':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
               <octahedronGeometry args={[1, 0]} />
-              <meshStandardMaterial color="#00BCD4" />
+              <meshStandardMaterial 
+                color="#00BCD4" 
+                metalness={0.6} 
+                roughness={0.1} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={2}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'dodecahedron':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <dodecahedronGeometry args={[1, 0]} />
-              <meshStandardMaterial color="#795548" />
+              <dodecahedronGeometry args={[0.8, 0]} />
+              <meshStandardMaterial 
+                color="#795548" 
+                metalness={0.4} 
+                roughness={0.3} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'icosahedron':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <icosahedronGeometry args={[1, 0]} />
-              <meshStandardMaterial color="#FFC107" />
+              <icosahedronGeometry args={[0.9, 0]} />
+              <meshStandardMaterial 
+                color="#FFC107" 
+                metalness={0.5} 
+                roughness={0.2} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1.5}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'tetrahedron':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
               <tetrahedronGeometry args={[1, 0]} />
-              <meshStandardMaterial color="#673AB7" />
+              <meshStandardMaterial 
+                color="#673AB7" 
+                metalness={0.3} 
+                roughness={0.4} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={2}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'torusKnot':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <torusKnotGeometry args={[1, 0.3, 100, 16]} />
-              <meshStandardMaterial color="#8BC34A" />
+              <torusKnotGeometry args={[0.8, 0.25, 100, 16]} />
+              <meshStandardMaterial 
+                color="#8BC34A" 
+                metalness={0.4} 
+                roughness={0.3} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'wireframeSphere':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <mesh>
-              <sphereGeometry args={[1, 16, 16]} />
-              <meshStandardMaterial color="#00E676" wireframe />
+              <sphereGeometry args={[0.9, 16, 16]} />
+              <meshStandardMaterial 
+                color="#00E676" 
+                wireframe 
+                metalness={0.1} 
+                roughness={0.9} 
+              />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1.5}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'glowingCube':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.4} />
+            <directionalLight position={[5, 5, 5]} intensity={0.6} />
             <mesh>
               <boxGeometry args={[1, 1, 1]} />
               <meshStandardMaterial 
                 color="#00E5FF" 
                 emissive="#0066CC" 
-                emissiveIntensity={0.2} 
+                emissiveIntensity={0.3} 
+                metalness={0.2}
+                roughness={0.1}
               />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={1}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'rotatingCube':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <RotatingCube />
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'bouncingSphere':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <BouncingSphere />
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'pulsingTorus':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <PulsingTorus />
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'multipleShapes':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
-            <mesh position={[-2, 0, 0]}>
-              <boxGeometry args={[1, 1, 1]} />
-              <meshStandardMaterial color="#FF4444" />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
+            <mesh position={[-1.5, 0, 0]}>
+              <boxGeometry args={[0.8, 0.8, 0.8]} />
+              <meshStandardMaterial color="#FF4444" metalness={0.3} roughness={0.4} />
             </mesh>
             <mesh position={[0, 0, 0]}>
-              <sphereGeometry args={[0.8, 32, 32]} />
-              <meshStandardMaterial color="#44FF44" />
+              <sphereGeometry args={[0.6, 32, 32]} />
+              <meshStandardMaterial color="#44FF44" metalness={0.2} roughness={0.3} />
             </mesh>
-            <mesh position={[2, 0, 0]}>
-              <coneGeometry args={[0.8, 1.5, 32]} />
-              <meshStandardMaterial color="#4444FF" />
+            <mesh position={[1.5, 0, 0]}>
+              <coneGeometry args={[0.6, 1.2, 32]} />
+              <meshStandardMaterial color="#4444FF" metalness={0.4} roughness={0.2} />
             </mesh>
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              autoRotate 
+              autoRotateSpeed={0.5}
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       case 'floatingRings':
         return (
           <Canvas {...commonProps}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} />
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} />
+            <pointLight position={[-5, -5, -5]} intensity={0.3} />
             <FloatingRings />
-            <OrbitControls enableZoom={false} enablePan={false} />
+            <OrbitControls 
+              enableZoom={true} 
+              enablePan={false} 
+              maxDistance={8}
+              minDistance={2}
+            />
           </Canvas>
         );
       default:
-        return null;
+        return (
+          <div className="flex items-center justify-center h-full text-muted-foreground">
+            <p>3D Element not found</p>
+          </div>
+        );
     }
   };
 
@@ -804,22 +996,22 @@ const ThreeDElementsPage = () => {
             <h2 className="text-2xl font-semibold mb-6">Individual 3D Elements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredElements.map(element => (
-                <div key={element.key} className="bg-card/40 border border-border/40 rounded-lg p-4 hover:bg-card/60 transition-all duration-300">
-                  <h3 className="font-semibold mb-2 text-foreground">{element.name}</h3>
+                <div key={element.key} className="glass-effect border border-border/40 rounded-lg p-4 hover-lift transition-all duration-300 group">
+                  <h3 className="font-semibold mb-2 gradient-text group-hover:text-primary transition-colors">{element.name}</h3>
                   <p className="text-sm text-muted-foreground mb-3">{element.description}</p>
-                  <div className="h-48 mb-4 rounded-lg overflow-hidden bg-background/50">
-                    {render3DElement(element.key)}
+                  <div className="h-48 mb-4 rounded-lg overflow-hidden bg-gradient-card border border-border/20 shadow-lg">
+                    <div className="w-full h-full">{render3DElement(element.key)}</div>
                   </div>
                   <div className="flex gap-2">
                     <Button 
-                      variant="outline" 
+                      variant="hero" 
                       size="sm" 
-                      className="flex-1"
+                      className="flex-1 hover-lift"
                       onClick={() => handleCopy(codeSnippets[element.key as keyof typeof codeSnippets], element.name)}
                     >
                       Copy Code
                     </Button>
-                    <span className="px-2 py-1 text-xs bg-secondary text-secondary-foreground rounded-md">
+                    <span className="px-3 py-1 text-xs bg-gradient-accent text-accent-foreground rounded-full font-medium">
                       {element.category}
                     </span>
                   </div>
