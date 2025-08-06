@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>snippet-synth-suite</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    <title>DevToolkit - All-in-one Developer Tools</title>
+    <meta name="description" content="DevToolkit - All-in-one developer tools including UI components, code snippets, animations, and 3D elements." />
+    <meta name="keywords" content="developer tools, UI components, code snippets, animations, 3D elements, React, TypeScript" />
+    <meta name="author" content="DevToolkit" />
 
-    <meta property="og:title" content="snippet-synth-suite" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="DevToolkit - All-in-one Developer Tools" />
+    <meta property="og:description" content="Comprehensive toolkit for developers featuring UI components, code snippets, animations, and 3D elements." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    
+    <!-- Preconnect to external domains for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Font loading with display: swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Prevent FOUC -->
+    <script>
+      document.documentElement.classList.remove('no-js');
+    </script>
   </head>
 
-  <body>
+  <body class="no-js">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
