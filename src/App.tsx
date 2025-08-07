@@ -11,6 +11,7 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
 const UIComponents = lazy(() => import("./pages/UIComponents"));
+const Documentation = lazy(() => import("./pages/Documentation"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CodeSnippets = lazy(() => import('./pages/CodeSnippets'));
 const Animations = lazy(() => import('./pages/Animations'));
@@ -49,6 +50,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/ui-components" element={<UIComponents />} />
+              <Route path="/documentation" element={<Documentation />} />
               <Route path="/code-snippets" element={<CodeSnippets />} />
               <Route path="/animations" element={<Animations />} />
               <Route path="/developer-utilities" element={<DeveloperUtilities />} />

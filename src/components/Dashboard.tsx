@@ -119,7 +119,7 @@ const Dashboard = () => {
               <Copy className="w-4 h-4" />
               Start Building
             </Button>
-            <Button variant="outline" size="lg">
+            <Button variant="outline" size="lg" onClick={() => navigate('/documentation')}>
               View Documentation
             </Button>
           </div>
